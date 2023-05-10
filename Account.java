@@ -54,6 +54,10 @@ class CheckingAccount extends Account{
         double overWithdrawal = overdObj.withdraw();
         return (balance-overWithdrawal);
     }
+    
+    void statement() {
+        System.out.println("commit of the day (lol close one)");
+    }
 }
 
 class SavingsAccount extends Account{
