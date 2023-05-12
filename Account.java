@@ -1,13 +1,10 @@
-# Polymorphism
-import java.util.*;
 public class Account {
     String accountNumber;
     double balance;
     public static void main(String[] args) {
-        //make constructor of data
-        Account person1 = new Account("S45667", 700);
-        Account person2 = new Account("CJ8923", 700);
-        Account person3 = new Account("578785", 700);
+//        make constructor of data
+        Account person1 = new Account("CJ8923", 0);
+        person1.s
     }
 
     Account (String accountNumber, double balance) {
@@ -17,20 +14,14 @@ public class Account {
 
 
     double deposit() {
-        Scanner depositObj = new Scanner(System.in);
-        System.out.print("How much would you like to deposit? ");   //asks for deposit
-        double depositedAmount = depositObj.nextDouble();
+
+        double depositedAmount = 300;
+
         double newBalance = balance+depositedAmount;
-//        System.out.println(accountNumber+" new balance is "+ newBalance);
-        depositObj.close();
         return (newBalance);
     }
     double withdraw() {
-        Scanner withdrawObj = new Scanner(System.in);
-//        System.out.print("How much would you like to withdraw? ");   //asks for withdrawal
-        double withdrawAmount = withdrawObj.nextDouble();
-        withdrawObj.close();
-        return (balance-withdrawAmount);
+        return (balance-50);
     }
 
     void transctioned_amount(){
@@ -39,11 +30,13 @@ public class Account {
 }
 
 class CheckingAccount extends Account{
-    double overdraftLimit() {       //overdraft limit
-    return(balance+100);
+    double overdraftLimit;       //overdraft limit
+    CheckingAccount(double overdraftLimit){
+        super("CJ8923", 0);
+        overdraftLimit = 100;
     }
     boolean overdraft(){
-        CheckingAccount overdObj = new CheckingAccount();   //when an overdraft happens
+//        CheckingAccount overdObj = new CheckingAccount();   //when an overdraft happens
         if (balance< 0) {
             return true;
         } 
@@ -52,15 +45,24 @@ class CheckingAccount extends Account{
         }
     }
     //make if statement of overdraft, and new balance
+    @Override
     void transctioned_amount() {
-        System.out.println("Account with number: "+accountNumber+" ");
+        System.out.println("Account with number: CJ8923 has");
     }
 }
 
 class SavingsAccount extends Account{
-    double interestRate = 0.03;         //savings account interest
+    double interestRate;         //savings account interest
+    SavingsAccount(double interestRate){
+        super("S45667", 700);
+        this.interestRate = interestRate;
+    }
     double calculateInterest() {
         return (balance*interestRate);
+    }
+    @Override
+    void transctioned_amount(){
+        System.out.println();
     }
 }
 //asks to choose an account to register
