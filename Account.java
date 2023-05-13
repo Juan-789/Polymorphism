@@ -1,48 +1,51 @@
+//Create a simple program that creates instances of the SavingsAccount and CheckingAccount classes and demonstrates the use of the methods in each class. 
+//Use polymorphism to create an array of Account objects that can contain both SavingsAccount and CheckingAccount objects. 
+//Use a loop to iterate through the array and call the appropriate methods for each object, demonstrating how polymorphism allows objects of 
+//different types to be treated as if they are of the same type.
 public class Account {
-    String accountNumber;
+    String accountNumber;       //attributes
     double balance;
-
-    Account (String accountNumber, double balance) {
-        this.accountNumber = accountNumber;
+    String transaction;
+    Account (String accountNumber, double balance, String transaction) {
+        this.accountNumber = accountNumber;     //constructor
         this.balance = balance;
+        this.transaction = transaction;
     }
 
-    double deposit() {
-        double depositedAmount = 300;
-        double newBalance = balance+depositedAmount;
-        return (newBalance);
+    boolean deposit(double amount) {        //deposit method
+        this.balance = balance+amount;
+        return true;
     }
 
-    double withdraw() {
-        return (balance-50);
+    boolean withdraw(double amount) {       //withdrawal method
+        this.balance=balance-amount;
+        return true;
     }
 
-    void transctioned_amount(){
+    void transctioned_amount(){             //polymorph method
         System.out.println("Account # has done the following transaction");
     }
 
 }
 
-class CheckingAccount extends Account{
+class CheckingAccount extends Account{                  //child class
     double overdraftLimit;       //overdraft limit
-    CheckingAccount(String accountNumber, double balance, double overdraftLimit){
-        super(accountNumber, balance);
+    CheckingAccount(String accountNumber, double balance, String transaction, double overdraftLimit){       //constructor
+        super(accountNumber, balance, transaction);
         this.overdraftLimit = overdraftLimit;
     }
-    boolean overdraft(){
-//        CheckingAccount overdObj = new CheckingAccount();   //when an overdraft happens
-        if (balance< 0) {
+    boolean overdraft(){        //when an overdraft happens
+        if (this.balance< 0) {
             return true;
         } 
         else {
             return false;
         }
     }
-    //make if statement of overdraft, and new balance
     @Override
-    void transctioned_amount() {
+    void transctioned_amount() {            //polymorphed methd
         if (overdraft() == true){
-        System.out.println("Account with number: CJ8923 has overdrafted");
+            System.out.println("Account with number: "+accountNumber+" has overdrafted, and has a current balance of $"+balance+" after the "+transaction+" occured.");
         }
     }
 }
@@ -50,28 +53,32 @@ class CheckingAccount extends Account{
 class SavingsAccount extends Account{
     double interestRate;         //savings account interest
 
-    SavingsAccount(String accountNumber, double balance,double interestRate){
-        super(accountNumber, balance);
+    SavingsAccount(String accountNumber, double balance, String transaction, double interestRate){  //constructor
+        super(accountNumber, balance, transaction);
         this.interestRate = interestRate;
     }
-    double calculateInterest() {
-        return (balance*interestRate);
+    double calculateInterest() {        //interest calculator
+        double interestGain = interestRate*this.balance;
+        return (interestGain);
     }
     @Override
-    void transctioned_amount(){
-//        SavingsAccount SavObj = new SavingsAccount(0.03);
-        System.out.println("Account number: "+accountNumber+" will accrue a total of $"+calculateInterest()+" a year from now.");
+    void transctioned_amount(){     //polymorphed method
+        System.out.println("Account number: "+accountNumber+" has a balance of $"+balance+" and will accrue a total of $"+calculateInterest()+" a year from now, and also performed a "+transaction+".");
     }
 }
-class Main{
+class Main {
     public static void main(String[] args) {
-        Account person1 = new Account("CJ8923", 1000);
-        Account person2 = new CheckingAccount("CJ365",0,50);
-        Account person3 = new SavingsAccount("SA765", 0, 0);
-        person2.withdraw();
-        
-        person2.transctioned_amount();
+        Account[] accounts = new Account[2];    //creating array of Account objects
+        accounts[0] = new CheckingAccount("CJ365", 0, "withdrew", 50);
+        accounts[1] = new SavingsAccount("SA765", 50, "deposit", 0.03);
+
+        for (Account account : accounts) {     //looping through the array
+            if (account instanceof CheckingAccount) {    //checking type of object
+                account.withdraw(20);
+            } else if (account instanceof SavingsAccount) {
+                account.deposit(50);
+            }
+            account.transctioned_amount();   //calling polymorphed method
+        }
     }
 }
-//asks to choose an account to register
-//then store the data and polymorph the methods
